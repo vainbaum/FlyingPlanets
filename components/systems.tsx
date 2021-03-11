@@ -7,9 +7,9 @@ const MoveFinger = (entities, { touches }) => {
     .filter((t: TouchEvent) => t.type === "move")
     .forEach((t: TouchEvent) => {
       let finger = entities[t.id + 1];
-      if (finger)  {
-          finger.body.position.x += t.delta.pageX * 0.1;
-          finger.body.position.y += t.delta.pageY * 0.1;
+      if (finger) {
+        finger.body.position.x += t.delta.pageX * 0.1;
+        finger.body.position.y += t.delta.pageY * 0.1;
       }
     });
 
@@ -18,7 +18,6 @@ const MoveFinger = (entities, { touches }) => {
 
 let id = 5;
 const StartFinger = (entities, { touches }) => {
-  console.log(touches);
   for (let i = 1; i < 6; i++) {
     const touchId = i - 1;
     touches
@@ -45,13 +44,18 @@ const Physics = (entities, { time }) => {
 };
 
 const GameBorders = (entities, { time }) => {
-  let engine = entities.physics.engine;
+  let engine = entities.rnGameEngine;
+      console.log(engine);
   for (let i = 1; i < 5; i++) {
-    const finger = entity[i];
-    if (finger.position[0] < 0 || finger.position[1] < 0) {
+    const finger = entities[i];
+    if (!finger) {
+      continue;
+    }
+    if (finger.body.position.x < 0 || finger.body.position.y < 0) {
       engine.dispatch({ type: "game-over" });
     }
   }
+  return entities;
 };
 
 export { MoveFinger, StartFinger, Physics, GameBorders };
