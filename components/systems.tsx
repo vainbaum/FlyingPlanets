@@ -2,17 +2,19 @@ import { TouchEvent } from "react-native-game-engine";
 import { Finger } from "./renderers";
 import Matter from "matter-js";
 
-const MoveFinger = (entities, { touches }) => {
+const MoveFinger = (entities, { touches, time }) => {
+  const factor = entities.scoreBoard.factor;
   touches
     .filter((t: TouchEvent) => t.type === "move")
     .forEach((t: TouchEvent) => {
       let finger = entities[t.id + 1];
       if (finger) {
-        finger.body.position.x += t.delta.pageX * 0.1;
-        finger.body.position.y += t.delta.pageY * 0.1;
+        finger.body.position.x += t.delta.pageX * 0.1 * factor;
+        finger.body.position.y += t.delta.pageY * 0.1 * factor;
       }
     });
 
+  entities.scoreBoard.factor += time.delta / 1000.0;
   return entities;
 };
 
@@ -49,10 +51,14 @@ const GameBorders = (entities, { time, dispatch }) => {
     if (!finger) {
       continue;
     }
-    if (finger.body.position.x < 0 || finger.body.position.y < 0) {
+    if (finger.body.position.x < -25 || finger.body.position.y < -25) {
+      dispatch({ type: "game-over" });
+    }
+    if (finger.body.position.x > 430 || finger.body.position.y > 800) {
       dispatch({ type: "game-over" });
     }
   }
+  entities.scoreBoard.score += time.delta * entities.scoreBoard.factor / 100.0;
   return entities;
 };
 

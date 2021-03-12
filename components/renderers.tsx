@@ -10,6 +10,11 @@ export interface IProps {
 body?: any;
 }
 
+export interface IScoreBoard {
+	score: number,
+	factor: number,
+}
+
 const Finger = (props: IProps) => {
   const x = props.body.position.x - RADIUS / 2;
   const y = props.body.position.y - RADIUS / 2;
@@ -20,6 +25,18 @@ const Finger = (props: IProps) => {
     </View>
   );
 };
+
+const ScoreBoard = (props: IScoreBoard) => {
+  const score = Math.round((props.score + Number.EPSILON) * 100) / 100;
+  const factor = Math.round((props.factor + Number.EPSILON) * 100) / 100;
+  return (
+    <View style={[styles.scoreBoard, { left: 20, top: 20 }]}>
+      <Text>Score: {score}</Text>
+      <Text>Factor: {factor}</Text>
+    </View>
+  );
+
+}
 
 const styles = StyleSheet.create({
   finger: {
@@ -44,6 +61,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  scoreBoard: {
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
+
+  }
 });
 
-export { Finger };
+export { Finger, ScoreBoard };

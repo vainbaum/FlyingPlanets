@@ -14,70 +14,39 @@ import {
   StatusBar,
   Alert,
   TouchableOpacity,
+  Switch,
+  Button,
 } from "react-native";
-import { Finger } from "./components/renderers";
-import {
-  MoveFinger,
-  StartFinger,
-  Physics,
-  GameBorders,
-} from "./components/systems";
-import { registerRootComponent } from "expo";
-import Entities from "./entities";
-import { Ring } from "./entities/Ring";
+import { ScoreBoard } from "./components/renderers";
+import GameScreen from "./components/GameScreen";
 
 class BestGameEver extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      running: true,
-      score: 0,
-      gameEngine: null,
-      entities: this.setupWorld(),
+      setupScreen: true,
+      running: false,
     };
   }
-  onEvent = (e) => {
-    if (e.type === "game-over") {
-      //Alert.alert("Game Over");
-      this.setState({
-        running: false,
-      });
-    }
+
+  stopGame = () => {
+    this.setState({ running: false });
   };
 
-  reset = () => {
-    this.setState({ running: true, entities: this.setupWorld() });
-  };
-
-  setupWorld = () => {
-    let entity = Entities(null);
-    return Object.assign({}, entity, {
-      1: Ring({ position: [70, 200], world: entity.physics.world }),
-      2: Ring({ position: [170, 200], world: entity.physics.world }),
-      3: Ring({ position: [270, 200], world: entity.physics.world }),
-      4: Ring({ position: [370, 200], world: entity.physics.world }),
-      //5: Ring({ position: [280, 200], world: entity.physics.world }),
-    });
+  startGame = () => {
+    this.setState({ running: true });
   };
 
   render() {
     return (
       <View style={styles.container}>
-        <GameEngine
-          ref={(ref) => {
-            this.state.gameEngine = ref;
-          }}
-          style={styles.gameContainer}
-          systems={[MoveFinger, Physics, StartFinger, GameBorders]}
-          onEvent={this.onEvent}
-          entities={this.state.entities}
-        >
-          <StatusBar hidden={true} />
-        </GameEngine>
+        {this.state.running && (
+          <GameScreen onStart={this.startGame} onStop={this.stopGame}/>
+        )}
         {!this.state.running && (
           <TouchableOpacity
             style={styles.fullScreenButton}
-            onPress={this.reset}
+            onPress={this.startGame}
           >
             <View style={styles.fullScreen}>
               <Text style={styles.gameOverText}>Game Over</Text>
@@ -93,13 +62,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-  },
-  gameContainer: {
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
   },
   gameOverText: {
     color: "white",
