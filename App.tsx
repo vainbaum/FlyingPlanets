@@ -33,11 +33,12 @@ class BestGameEver extends React.Component {
       running: true,
       score: 0,
       gameEngine: null,
+      entities: this.setupWorld(),
     };
   }
   onEvent = (e) => {
     if (e.type === "game-over") {
-      Alert.alert("Game Over");
+      //Alert.alert("Game Over");
       this.setState({
         running: false,
       });
@@ -45,11 +46,21 @@ class BestGameEver extends React.Component {
   };
 
   reset = () => {
-    this.setState({ running: true });
+    this.setState({ running: true, entities: this.setupWorld() });
+  };
+
+  setupWorld = () => {
+    let entity = Entities(null);
+    return Object.assign({}, entity, {
+      1: Ring({ position: [70, 200], world: entity.physics.world }),
+      2: Ring({ position: [170, 200], world: entity.physics.world }),
+      3: Ring({ position: [270, 200], world: entity.physics.world }),
+      4: Ring({ position: [370, 200], world: entity.physics.world }),
+      //5: Ring({ position: [280, 200], world: entity.physics.world }),
+    });
   };
 
   render() {
-    let entity = Entities(null);
     return (
       <View style={styles.container}>
         <GameEngine
@@ -59,14 +70,7 @@ class BestGameEver extends React.Component {
           style={styles.gameContainer}
           systems={[MoveFinger, Physics, StartFinger, GameBorders]}
           onEvent={this.onEvent}
-          entities={Object.assign({}, entity, {
-            1: Ring({ position: [40, 200], world: entity.physics.world }),
-            2: Ring({ position: [100, 200], world: entity.physics.world }),
-            3: Ring({ position: [160, 200], world: entity.physics.world }),
-            4: Ring({ position: [220, 200], world: entity.physics.world }),
-            //5: Ring({ position: [280, 200], world: entity.physics.world }),
-            rnGameEngine: this.state.gameEngine,
-          })}
+          entities={this.state.entities}
         >
           <StatusBar hidden={true} />
         </GameEngine>
@@ -86,40 +90,40 @@ class BestGameEver extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-    },
-    gameContainer: {
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-    },
-    gameOverText: {
-        color: 'white',
-        fontSize: 48
-    },
-    fullScreen: {
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: 'black',
-        opacity: 0.8,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    fullScreenButton: {
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        flex: 1
-    }
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  gameContainer: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  gameOverText: {
+    color: "white",
+    fontSize: 48,
+  },
+  fullScreen: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "black",
+    opacity: 0.8,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  fullScreenButton: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flex: 1,
+  },
 });
 
 export default BestGameEver;

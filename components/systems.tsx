@@ -43,16 +43,14 @@ const Physics = (entities, { time }) => {
   return entities;
 };
 
-const GameBorders = (entities, { time }) => {
-  let engine = entities.rnGameEngine;
-      console.log(engine);
+const GameBorders = (entities, { time, dispatch }) => {
   for (let i = 1; i < 5; i++) {
     const finger = entities[i];
     if (!finger) {
       continue;
     }
     if (finger.body.position.x < 0 || finger.body.position.y < 0) {
-      engine.dispatch({ type: "game-over" });
+      dispatch({ type: "game-over" });
     }
   }
   return entities;
