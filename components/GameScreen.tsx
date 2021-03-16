@@ -4,32 +4,52 @@ import { MoveFinger, StartFinger, Physics, GameBorders } from "./systems";
 import Entities from "../entities";
 import { Ring } from "../entities/Ring";
 import {
-  Dimensions,
   StyleSheet,
-  Text,
-  View,
   StatusBar,
-  Alert,
-  TouchableOpacity,
-  Switch,
-  Button,
+  BackHandler,
 } from "react-native";
 import { ScoreBoard } from "./renderers";
 
-export default class GameScreen extends Component {
+interface IGameScreenState {
+  setupScreen: boolean,
+  score: number,
+  factor: boolean,
+  gameEngine: any,
+  onBack: () => boolean,
+  onStart: () => void,
+  onStop : () => void,
+  entities: any,
+}
+
+export default class GameScreen extends Component<any, IGameScreenState> {
   constructor(props) {
     super(props);
+    console.log(props);
     this.state = {
       setupScreen: true,
       score: 0,
+      factor: props.factor,
       gameEngine: null,
-      entities: this.setupWorld(),
       onStart: props.onStart,
       onStop: props.onStop,
+      onBack: props.onBack,
+      entities: {},
     };
+    this.state.entities = this.setupWorld();
+  }
+
+  componentDidMount() {
+	BackHandler.addEventListener('hardwareBackPress', this.state.onBack)
+  }
+
+  componentWillUnmount() {
+	BackHandler.removeEventListener('hardwareBackPress', this.state.onBack)
   }
 
   onEvent = (e) => {
+    if (!e) {
+      return;
+    }
     if (e.type === "game-over") {
       //Alert.alert("Game Over");
       this.state.gameEngine.stop();
@@ -51,12 +71,19 @@ export default class GameScreen extends Component {
 
   setupWorld = () => {
     let entity = Entities(null);
+    console.log(this.state);
+    let factor = this.state.factor;
     return Object.assign({}, entity, {
       1: Ring({ position: [70, 200], world: entity.physics.world }),
       2: Ring({ position: [170, 200], world: entity.physics.world }),
       3: Ring({ position: [270, 200], world: entity.physics.world }),
       4: Ring({ position: [370, 200], world: entity.physics.world }),
-      scoreBoard: { factor: 1, score: 0, renderer: <ScoreBoard /> },
+      scoreBoard: {
+        factor: 1,
+        score: 0,
+        mutable: factor,
+        renderer: <ScoreBoard />,
+      },
     });
   };
   render() {

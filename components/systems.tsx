@@ -14,7 +14,9 @@ const MoveFinger = (entities, { touches, time }) => {
       }
     });
 
-  entities.scoreBoard.factor += time.delta / 1000.0;
+  if (entities.scoreBoard.mutable) {
+    entities.scoreBoard.factor += time.delta / 1000.0;
+  }
   return entities;
 };
 
@@ -58,7 +60,8 @@ const GameBorders = (entities, { time, dispatch }) => {
       dispatch({ type: "game-over" });
     }
   }
-  entities.scoreBoard.score += time.delta * entities.scoreBoard.factor / 100.0;
+  entities.scoreBoard.score +=
+    (time.delta * entities.scoreBoard.factor) / 100.0;
   return entities;
 };
 

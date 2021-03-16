@@ -14,11 +14,10 @@ import {
   StatusBar,
   Alert,
   TouchableOpacity,
-  Switch,
-  Button,
 } from "react-native";
 import { ScoreBoard } from "./components/renderers";
 import GameScreen from "./components/GameScreen";
+import { SetupScreen } from "./components/SetupScreen";
 
 class BestGameEver extends React.Component {
   constructor(props) {
@@ -26,6 +25,7 @@ class BestGameEver extends React.Component {
     this.state = {
       setupScreen: true,
       running: false,
+      factor: false,
     };
   }
 
@@ -34,16 +34,37 @@ class BestGameEver extends React.Component {
   };
 
   startGame = () => {
-    this.setState({ running: true });
+    this.setState({ running: true, setupScreen: false });
+  };
+
+  toggleFactor = () => {
+    this.setState({ factor: !this.state.factor });
+  };
+
+  backToSetupScreen = () => {
+    this.setState({ running: false, setupScreen: true });
+    return true;
   };
 
   render() {
     return (
       <View style={styles.container}>
-        {this.state.running && (
-          <GameScreen onStart={this.startGame} onStop={this.stopGame}/>
+        {this.state.setupScreen && (
+          <SetupScreen
+            factor={this.state.factor}
+            startGame={this.startGame}
+            toggleFactor={this.toggleFactor}
+          />
         )}
-        {!this.state.running && (
+        {this.state.running && (
+          <GameScreen
+            onStart={this.startGame}
+            onStop={this.stopGame}
+            onBack={this.backToSetupScreen}
+            factor={this.state.factor}
+          />
+        )}
+        {!this.state.running && !this.state.setupScreen && (
           <TouchableOpacity
             style={styles.fullScreenButton}
             onPress={this.startGame}
