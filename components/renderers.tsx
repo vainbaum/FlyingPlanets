@@ -7,12 +7,12 @@ export interface IProps {
   position: number[];
   text?: number | string;
   pressed?: boolean;
-body?: any;
+  body?: any;
 }
 
 export interface IScoreBoard {
-	score: number,
-	factor: number,
+  score: number;
+  factor: number;
 }
 
 const Finger = (props: IProps) => {
@@ -31,12 +31,11 @@ const ScoreBoard = (props: IScoreBoard) => {
   const factor = Math.round((props.factor + Number.EPSILON) * 100) / 100;
   return (
     <View style={[styles.scoreBoard, { left: 20, top: 20 }]}>
-      <Text>Score: {score}</Text>
-      <Text>Factor: {factor}</Text>
+      <Text style={styles.scoreBoardText}>Score: {score}</Text>
+      <Text style={styles.scoreBoardText}>Factor: {factor}</Text>
     </View>
   );
-
-}
+};
 
 const styles = StyleSheet.create({
   finger: {
@@ -65,8 +64,10 @@ const styles = StyleSheet.create({
     position: "absolute",
     alignItems: "center",
     justifyContent: "center",
-
-  }
+  },
+  scoreBoardText: {
+    color: "snow",
+  },
 });
 
 export { Finger, ScoreBoard };

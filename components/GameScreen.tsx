@@ -3,22 +3,19 @@ import { GameEngine } from "react-native-game-engine";
 import { MoveFinger, StartFinger, Physics, GameBorders } from "./systems";
 import Entities from "../entities";
 import { Ring } from "../entities/Ring";
-import {
-  StyleSheet,
-  StatusBar,
-  BackHandler,
-} from "react-native";
+import { StyleSheet, StatusBar, BackHandler } from "react-native";
 import { ScoreBoard } from "./renderers";
+import { Image } from "react-native";
 
 interface IGameScreenState {
-  setupScreen: boolean,
-  score: number,
-  factor: boolean,
-  gameEngine: any,
-  onBack: () => boolean,
-  onStart: () => void,
-  onStop : () => void,
-  entities: any,
+  setupScreen: boolean;
+  score: number;
+  factor: boolean;
+  gameEngine: any;
+  onBack: () => boolean;
+  onStart: () => void;
+  onStop: () => void;
+  entities: any;
 }
 
 export default class GameScreen extends Component<any, IGameScreenState> {
@@ -39,11 +36,11 @@ export default class GameScreen extends Component<any, IGameScreenState> {
   }
 
   componentDidMount() {
-	BackHandler.addEventListener('hardwareBackPress', this.state.onBack)
+    BackHandler.addEventListener("hardwareBackPress", this.state.onBack);
   }
 
   componentWillUnmount() {
-	BackHandler.removeEventListener('hardwareBackPress', this.state.onBack)
+    BackHandler.removeEventListener("hardwareBackPress", this.state.onBack);
   }
 
   onEvent = (e) => {
@@ -97,6 +94,10 @@ export default class GameScreen extends Component<any, IGameScreenState> {
         onEvent={this.onEvent}
         entities={this.state.entities}
       >
+        <Image
+          style={styles.backgroundImage}
+          source={require("../assets/images/cosmos.webp")}
+        />
         <StatusBar hidden={true} />
       </GameEngine>
     );
@@ -110,5 +111,11 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
+  },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: "cover",
+    position: "absolute",
+    zIndex: -1,
   },
 });

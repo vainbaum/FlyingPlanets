@@ -1,5 +1,12 @@
 import React from "react";
-import { View, Button, Switch, Text, StyleSheet } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  Switch,
+  Text,
+  StyleSheet,
+  Image,
+} from "react-native";
 
 interface ISetupScreenProps {
   factor: boolean;
@@ -12,21 +19,21 @@ export const SetupScreen = ({
   startGame,
 }: ISetupScreenProps) => {
   return (
-    <View style={style.fullScreen}>
+    <View>
+      <Image
+        style={style.backgroundImage}
+        source={require("../assets/images/cosmos.webp")}
+      />
       <View style={style.fullScreenButton}>
-        <Button title="Start Game" onPress={startGame} />
+        <TouchableOpacity style={style.startGameButton} onPress={startGame}>
+          <Text style={style.startGameText}>Start Game</Text>
+        </TouchableOpacity>
       </View>
-      <View style={style.middle}>
-        <Text>Factor</Text>
-      </View>
-      <View style={style.fullScreenSwitch}>
-        <Switch
-          trackColor={{ false: "#767577", true: "#1b38a1" }}
-          thumbColor={factor ? "#f5dd4b" : "#570957"}
-          ios_backgroundColor="#3e3e3e"
-          onValueChange={toggleFactor}
-          value={factor}
-        />
+      <View>
+        <Text style={style.factorText}>Factor</Text>
+        <View style={style.fullScreenSwitch}>
+          <Switch onValueChange={toggleFactor} value={factor} />
+        </View>
       </View>
     </View>
   );
@@ -39,16 +46,41 @@ const style = StyleSheet.create({
     flex: 1,
     opacity: 0.9,
   },
-  fullScreenButton: {
+  backgroundImage: {
     flex: 1,
+    resizeMode: "cover",
+    position: "absolute",
+    zIndex: -1,
+  },
+  fullScreenButton: {
     width: "100%",
-    alignSelf: "stretch",
+    position: "relative",
+    top: 700,
+    alignItems: "center",
+    borderRadius: 35,
   },
   middle: { flex: 1 },
   fullScreenSwitch: {
-    flex: 1,
-    backgroundColor: "gray",
     opacity: 1,
-    alignSelf: "stretch",
+    width: "40%",
+    backgroundColor: "goldenrod",
+  },
+  startGameText: {
+    color: "snow",
+    fontSize: 25,
+  },
+  factorText: {
+    color: "snow",
+    fontSize: 25,
+    width: "40%",
+  },
+  startGameButton: {
+    borderRadius: 30,
+    borderWidth: 1,
+    width: "60%",
+    height: 70,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "chocolate",
   },
 });
