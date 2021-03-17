@@ -21,7 +21,6 @@ interface IGameScreenState {
 export default class GameScreen extends Component<any, IGameScreenState> {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       setupScreen: true,
       score: 0,
@@ -68,7 +67,6 @@ export default class GameScreen extends Component<any, IGameScreenState> {
 
   setupWorld = () => {
     let entity = Entities(null);
-    console.log(this.state);
     let factor = this.state.factor;
     return Object.assign({}, entity, {
       1: Ring({ position: [70, 200], world: entity.physics.world }),
