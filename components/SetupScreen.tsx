@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
+import { useFonts, MajorMonoDisplay_400Regular} from "@expo-google-fonts/major-mono-display";
 
 interface ISetupScreenProps {
   factor: boolean;
@@ -18,6 +19,12 @@ export const SetupScreen = ({
   toggleFactor,
   startGame,
 }: ISetupScreenProps) => {
+  let [fontsLoaded] = useFonts({
+    MajorMonoDisplay_400Regular,
+  });
+  if (!fontsLoaded) {
+    return <Text>Loading</Text>;
+  }
   return (
     <View>
       <Image
@@ -68,6 +75,8 @@ const style = StyleSheet.create({
   startGameText: {
     color: "snow",
     fontSize: 25,
+    fontFamily: "MajorMonoDisplay_400Regular",
+    textAlign: "center",
   },
   factorText: {
     color: "snow",
@@ -78,7 +87,7 @@ const style = StyleSheet.create({
     borderRadius: 30,
     borderWidth: 1,
     width: "60%",
-    height: 70,
+    height: 60,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "chocolate",
