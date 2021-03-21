@@ -53,11 +53,12 @@ const GameBorders = (entities, { time, dispatch }) => {
     if (!finger) {
       continue;
     }
+    const score = Math.round((entities.scoreBoard.score + Number.EPSILON) * 100) / 100;
     if (finger.body.position.x < -25 || finger.body.position.y < -25) {
-      dispatch({ type: "game-over" });
+      dispatch({ type: "game-over", score: score });
     }
     if (finger.body.position.x > 430 || finger.body.position.y > 800) {
-      dispatch({ type: "game-over" });
+      dispatch({ type: "game-over", score: score });
     }
   }
   entities.scoreBoard.score +=

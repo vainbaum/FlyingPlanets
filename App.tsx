@@ -1,112 +1,102 @@
-import React, { PureComponent } from "react";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-
-import useCachedResources from "./hooks/useCachedResources";
-import useColorScheme from "./hooks/useColorScheme";
-import Navigation from "./navigation";
-import { GameEngine } from "react-native-game-engine";
-import { AppRegistry } from "react-native";
+import React from "react";
 import {
   Dimensions,
   StyleSheet,
   Text,
   View,
-  StatusBar,
-  Alert,
   TouchableOpacity,
 } from "react-native";
-import { ScoreBoard } from "./components/renderers";
 import GameScreen from "./components/GameScreen";
 import { SetupScreen } from "./components/SetupScreen";
+import GameOverScreen from "./components/GameOverScreen";
+import HighScoreScreen from "./components/HighScore";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-class BestGameEver extends React.Component {
-  constructor(props) {
+const Stack = createStackNavigator();
+
+interface IAppState {
+  factor: boolean;
+  score: number;
+  highScore: number[];
+}
+
+class BestGameEver extends React.Component<any, IAppState> {
+  constructor(props: any) {
     super(props);
     this.state = {
-      setupScreen: true,
-      running: false,
       factor: false,
+      score: 0,
+      highScore: [],
     };
   }
 
-  stopGame = () => {
-    this.setState({ running: false });
+  componentDidMount() {
+    this.readData().then((highScore) =>
+      this.setState({ highScore: highScore })
+    );
+  }
+
+  componentWillUnmount() {
+    AsyncStorage.setItem("@highScore", JSON.stringify(this.state.highScore));
+  }
+
+  readData = async () => {
+    try {
+      const highScore = await AsyncStorage.getItem("@highScore");
+      if (highScore == null) {
+        return [];
+      }
+      return JSON.parse(highScore);
+    } catch (e) {
+      return [];
+    }
   };
 
-  startGame = () => {
-    this.setState({ running: true, setupScreen: false });
+  stopGame = (score: number) => {
+    const highScore = this.setHighScore(score);
+    this.setState({ score: score, highScore: highScore });
   };
 
-  toggleFactor = () => {
-    this.setState({ factor: !this.state.factor });
-  };
-
-  backToSetupScreen = () => {
-    this.setState({ running: false, setupScreen: true });
-    return true;
+  setHighScore = (score: number): number[] => {
+    let highScore = this.state.highScore;
+    let pushed = false;
+    for (let i = 0; i < highScore.length; i++) {
+      if (highScore[i] < score) {
+        highScore.splice(i, 0, score);
+        pushed = true;
+        break;
+      }
+    }
+    if (!pushed) {
+      highScore.push(score);
+    }
+    highScore.splice(10);
+    return highScore;
   };
 
   render() {
     return (
-      <View style={styles.container}>
-        {this.state.setupScreen && (
-          <SetupScreen
-            factor={this.state.factor}
-            startGame={this.startGame}
-            toggleFactor={this.toggleFactor}
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="Setup"
+          screenOptions={{ headerShown: false }}
+        >
+          <Stack.Screen name="Setup" component={SetupScreen} />
+          <Stack.Screen name="Game">
+            {(props) => <GameScreen {...props} onStop={this.stopGame} />}
+          </Stack.Screen>
+          <Stack.Screen name="GameOver" component={GameOverScreen} />
+          <Stack.Screen
+            name="HighScore"
+            component={HighScoreScreen}
+            initialParams={{ highScore: this.state.highScore }}
           />
-        )}
-        {this.state.running && (
-          <GameScreen
-            onStart={this.startGame}
-            onStop={this.stopGame}
-            onBack={this.backToSetupScreen}
-            factor={this.state.factor}
-          />
-        )}
-        {!this.state.running && !this.state.setupScreen && (
-          <TouchableOpacity
-            style={styles.fullScreenButton}
-            onPress={this.startGame}
-          >
-            <View style={styles.fullScreen}>
-              <Text style={styles.gameOverText}>Game Over</Text>
-            </View>
-          </TouchableOpacity>
-        )}
-      </View>
+        </Stack.Navigator>
+      </NavigationContainer>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  gameOverText: {
-    color: "white",
-    fontSize: 48,
-  },
-  fullScreen: {
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: "black",
-    opacity: 0.8,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  fullScreenButton: {
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flex: 1,
-  },
-});
 
 export default BestGameEver;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   TouchableOpacity,
@@ -7,18 +7,17 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
-import { useFonts, MajorMonoDisplay_400Regular} from "@expo-google-fonts/major-mono-display";
+import {
+  useFonts,
+  MajorMonoDisplay_400Regular,
+} from "@expo-google-fonts/major-mono-display";
 
 interface ISetupScreenProps {
-  factor: boolean;
-  toggleFactor: () => void;
-  startGame: () => void;
+  route: any;
+  navigation: any;
 }
-export const SetupScreen = ({
-  factor,
-  toggleFactor,
-  startGame,
-}: ISetupScreenProps) => {
+export const SetupScreen = ({ route, navigation }: ISetupScreenProps) => {
+  const [factor, setFactor] = useState(false);
   let [fontsLoaded] = useFonts({
     MajorMonoDisplay_400Regular,
   });
@@ -31,16 +30,44 @@ export const SetupScreen = ({
         style={style.backgroundImage}
         source={require("../assets/images/cosmos.webp")}
       />
-      <View style={style.fullScreenButton}>
-        <TouchableOpacity style={style.startGameButton} onPress={startGame}>
-          <Text style={style.startGameText}>Start Game</Text>
+      <View style={style.factorView}>
+        <Text style={style.factorText}>Factor</Text>
+        <Switch
+          onValueChange={() => {
+            setFactor(!factor);
+          }}
+          value={factor}
+          style={style.fullScreenSwitch}
+          trackColor={{ false: "aliceblue", true: "crimson" }}
+          thumbColor="cornflowerblue"
+        />
+      </View>
+      <View style={style.factorHelpView}>
+        <Text style={style.factorText} adjustsFontSizeToFit numberOfLines={3}>
+          Factor makes game harder, as objects response on finger moves becomes
+          more sensetive over time. On the other hand, score over time is
+          multiplied by the factor{" "}
+        </Text>
+      </View>
+      <View style={style.highScoreButton}>
+        <TouchableOpacity
+          style={style.startGameButton}
+          onPress={() => navigation.navigate("HighScore")}
+        >
+          <Text style={style.startGameText}>High Score</Text>
         </TouchableOpacity>
       </View>
-      <View>
-        <Text style={style.factorText}>Factor</Text>
-        <View style={style.fullScreenSwitch}>
-          <Switch onValueChange={toggleFactor} value={factor} />
-        </View>
+      <View style={style.fullScreenButton}>
+        <TouchableOpacity
+          style={style.startGameButton}
+          onPress={() =>
+            navigation.navigate("Game", {
+              factor: factor,
+            })
+          }
+        >
+          <Text style={style.startGameText}>Start Game</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -61,16 +88,22 @@ const style = StyleSheet.create({
   },
   fullScreenButton: {
     width: "100%",
-    position: "relative",
+    position: "absolute",
     top: 700,
+    alignItems: "center",
+    borderRadius: 35,
+  },
+  highScoreButton: {
+    width: "100%",
+    position: "absolute",
+    top: 600,
     alignItems: "center",
     borderRadius: 35,
   },
   middle: { flex: 1 },
   fullScreenSwitch: {
-    opacity: 1,
-    width: "40%",
-    backgroundColor: "goldenrod",
+    flex: 1,
+    marginLeft: 5,
   },
   startGameText: {
     color: "snow",
@@ -81,7 +114,25 @@ const style = StyleSheet.create({
   factorText: {
     color: "snow",
     fontSize: 25,
-    width: "40%",
+    flex: 1,
+    marginRight: 5,
+    textAlign: "center",
+  },
+  factorHelpText: {
+    color: "snow",
+    fontSize: 16,
+    flex: 1,
+    textAlign: "left",
+  },
+  factorView: {
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    marginTop: 100,
+  },
+  factorHelpView: {
+    flexDirection: "row",
+    marginTop: 10,
   },
   startGameButton: {
     borderRadius: 30,
@@ -90,6 +141,6 @@ const style = StyleSheet.create({
     height: 60,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "chocolate",
+    backgroundColor: "deepskyblue",
   },
 });

@@ -8,61 +8,51 @@ import { ScoreBoard } from "./renderers";
 import { Image } from "react-native";
 
 interface IGameScreenState {
-  setupScreen: boolean;
   score: number;
   factor: boolean;
   gameEngine: any;
-  onBack: () => boolean;
-  onStart: () => void;
-  onStop: () => void;
+  onStop: (score: number) => void;
   entities: any;
+  navigation: any;
 }
 
 export default class GameScreen extends Component<any, IGameScreenState> {
-  constructor(props) {
+  constructor(props: any) {
     super(props);
     this.state = {
-      setupScreen: true,
       score: 0,
-      factor: props.factor,
+      factor: props.route.params.factor,
       gameEngine: null,
-      onStart: props.onStart,
       onStop: props.onStop,
-      onBack: props.onBack,
       entities: {},
+      navigation: props.navigation,
     };
     this.state.entities = this.setupWorld();
   }
 
+  goBack = () => {
+    this.state.navigation.navigate("Setup");
+    return true;
+  };
+
   componentDidMount() {
-    BackHandler.addEventListener("hardwareBackPress", this.state.onBack);
+    BackHandler.addEventListener("hardwareBackPress", this.goBack);
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener("hardwareBackPress", this.state.onBack);
+    BackHandler.removeEventListener("hardwareBackPress", this.goBack);
   }
 
-  onEvent = (e) => {
+  onEvent = (e: { type: string; score: number }) => {
     if (!e) {
       return;
     }
     if (e.type === "game-over") {
       //Alert.alert("Game Over");
       this.state.gameEngine.stop();
-      this.state.onStop();
+      this.state.onStop(e.score);
+      this.state.navigation.navigate("GameOver", { score: e.score, factor: this.state.factor });
     }
-  };
-
-  reset = () => {
-    this.state.gameEngine.swap(this.setupWorld());
-    this.setState({ running: true });
-    this.state.gameEngine.start();
-  };
-
-  startGame = () => {
-    this.setState({ setupScreen: false });
-    this.reset();
-    this.state.onStart();
   };
 
   setupWorld = () => {
@@ -77,7 +67,7 @@ export default class GameScreen extends Component<any, IGameScreenState> {
         factor: 1,
         score: 0,
         mutable: factor,
-        renderer: <ScoreBoard />,
+        renderer: <ScoreBoard score={0} factor={1} mutable={factor} />,
       },
     });
   };
