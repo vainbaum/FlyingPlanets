@@ -5,17 +5,23 @@ const HighScoreScreen = (props: any) => {
   return (
     <View style={styles.fullScreen}>
       {props.route.params.highScore.map((score: number, index: number) => {
-        let style = styles.otherPlace;
+        let style = styles.other;
         if (index == 0) {
-          style = styles.goldPlace;
+          style = styles.gold;
         } else if (index == 1) {
-          style = styles.silverPlace;
+          style = styles.silver;
         } else if (index == 2) {
-          style = styles.bronzePlace;
+          style = styles.bronze;
         }
+        const medal = <View style={[style, styles.medal]} />;
         return (
           <View style={styles.scoreView} key={index}>
-            <Text style={style} adjustsFontSizeToFit numberOfLines={1}>
+            {medal}
+            <Text
+              style={styles.highScoreText}
+              adjustsFontSizeToFit
+              numberOfLines={1}
+            >
               {score}
             </Text>
           </View>
@@ -38,33 +44,30 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
-  goldPlace: {
+  medal: {
+    borderRadius: 25,
+    width: 25,
+    height: 25,
+    justifyContent: "center",
+marginTop: 15,
+  },
+  gold: {
     color: "white",
-    fontSize: 40,
     backgroundColor: "darkgoldenrod",
-    borderRadius: 20,
-    width: "100%",
-    textAlign: "center",
   },
-  silverPlace: {
+  silver: {
     color: "black",
-    fontSize: 40,
     backgroundColor: "silver",
-    borderRadius: 20,
-    width: "100%",
-    textAlign: "center",
   },
-  bronzePlace: {
+  bronze: {
     color: "white",
-    fontSize: 40,
     backgroundColor: "orangered",
-    borderRadius: 20,
-    width: "100%",
-    textAlign: "center",
   },
-  otherPlace: {
+  other: {
     color: "white",
-    textAlign: "center",
+  },
+  highScoreText: {
+    color: "beige",
     fontSize: 40,
   },
   fullScreen: {
@@ -82,6 +85,8 @@ const styles = StyleSheet.create({
   scoreView: {
     width: "60%",
     textAlign: "center",
+    flexDirection: "row",
+    justifyContent: "center",
   },
   button: {
     backgroundColor: "steelblue",

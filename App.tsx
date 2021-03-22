@@ -38,10 +38,6 @@ class BestGameEver extends React.Component<any, IAppState> {
     );
   }
 
-  componentWillUnmount() {
-    AsyncStorage.setItem("@highScore", JSON.stringify(this.state.highScore));
-  }
-
   readData = async () => {
     try {
       const highScore = await AsyncStorage.getItem("@highScore");
@@ -56,6 +52,7 @@ class BestGameEver extends React.Component<any, IAppState> {
 
   stopGame = (score: number) => {
     const highScore = this.setHighScore(score);
+    AsyncStorage.setItem("@highScore", JSON.stringify(this.state.highScore));
     this.setState({ score: score, highScore: highScore });
   };
 
