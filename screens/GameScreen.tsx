@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { GameEngine } from "react-native-game-engine";
-import { MoveFinger, StartFinger, Physics, GameBorders } from "./systems";
+import { Move, Press, Physics, GameBorders } from "../components/systems";
 import Entities from "../entities";
 import { Ring } from "../entities/Ring";
 import { StyleSheet, StatusBar, BackHandler } from "react-native";
-import { ScoreBoard } from "./renderers";
+import { ScoreBoard } from "../components/renderers";
 import { Image } from "react-native";
 
 interface IGameScreenState {
@@ -78,7 +78,7 @@ export default class GameScreen extends Component<any, IGameScreenState> {
           this.state.gameEngine = ref;
         }}
         style={styles.gameContainer}
-        systems={[MoveFinger, Physics, StartFinger, GameBorders]}
+        systems={[Move, Physics, Press, GameBorders]}
         onEvent={this.onEvent}
         entities={this.state.entities}
       >

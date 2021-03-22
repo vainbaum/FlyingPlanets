@@ -1,8 +1,7 @@
 import { TouchEvent } from "react-native-game-engine";
-import { Finger } from "./renderers";
 import Matter from "matter-js";
 
-const MoveFinger = (entities, { touches, time }) => {
+const Move = (entities, { touches, time }) => {
   const factor = entities.scoreBoard.factor;
   touches
     .filter((t: TouchEvent) => t.type === "move")
@@ -20,8 +19,7 @@ const MoveFinger = (entities, { touches, time }) => {
   return entities;
 };
 
-let id = 5;
-const StartFinger = (entities, { touches }) => {
+const Press = (entities, { touches }) => {
   for (let i = 1; i < 6; i++) {
     const touchId = i - 1;
     touches
@@ -66,4 +64,4 @@ const GameBorders = (entities, { time, dispatch }) => {
   return entities;
 };
 
-export { MoveFinger, StartFinger, Physics, GameBorders };
+export { Move, Press, Physics, GameBorders };

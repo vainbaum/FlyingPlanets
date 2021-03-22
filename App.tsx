@@ -1,15 +1,8 @@
 import React from "react";
-import {
-  Dimensions,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-} from "react-native";
-import GameScreen from "./components/GameScreen";
-import { SetupScreen } from "./components/SetupScreen";
-import GameOverScreen from "./components/GameOverScreen";
-import HighScoreScreen from "./components/HighScore";
+import GameScreen from "./screens/GameScreen";
+import { SetupScreen } from "./screens/SetupScreen";
+import GameOverScreen from "./screens/GameOverScreen";
+import HighScoreScreen from "./screens/HighScoreScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
