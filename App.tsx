@@ -1,7 +1,7 @@
 import React from "react";
 import GameScreen from "./screens/GameScreen";
 import { SetupScreen } from "./screens/SetupScreen";
-import GameOverScreen from "./screens/GameOverScreen";
+import GameOverScreen, { IPlace } from "./screens/GameOverScreen";
 import HighScoreScreen from "./screens/HighScoreScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -12,7 +12,7 @@ const Stack = createStackNavigator();
 interface IAppState {
   factor: boolean;
   score: number;
-  highScore: number[];
+  highScore: IPlace[];
 }
 
 class BestGameEver extends React.Component<any, IAppState> {
@@ -44,26 +44,12 @@ class BestGameEver extends React.Component<any, IAppState> {
   };
 
   stopGame = (score: number) => {
-    const highScore = this.setHighScore(score);
-    AsyncStorage.setItem("@highScore", JSON.stringify(this.state.highScore));
-    this.setState({ score: score, highScore: highScore });
+    this.setState({ score: score });
   };
 
-  setHighScore = (score: number): number[] => {
-    let highScore = this.state.highScore;
-    let pushed = false;
-    for (let i = 0; i < highScore.length; i++) {
-      if (highScore[i] < score) {
-        highScore.splice(i, 0, score);
-        pushed = true;
-        break;
-      }
-    }
-    if (!pushed) {
-      highScore.push(score);
-    }
-    highScore.splice(10);
-    return highScore;
+  setHighScore = (highScore: IPlace[]): void => {
+    AsyncStorage.setItem("@highScore", JSON.stringify(highScore));
+    this.setState({ highScore: highScore });
   };
 
   render() {
@@ -77,7 +63,15 @@ class BestGameEver extends React.Component<any, IAppState> {
           <Stack.Screen name="Game">
             {(props) => <GameScreen {...props} onStop={this.stopGame} />}
           </Stack.Screen>
-          <Stack.Screen name="GameOver" component={GameOverScreen} />
+          <Stack.Screen name="GameOver">
+            {(props) => (
+              <GameOverScreen
+                {...props}
+                onNewHighScore={this.setHighScore}
+                highScore={this.state.highScore}
+              />
+            )}
+          </Stack.Screen>
           <Stack.Screen
             name="HighScore"
             component={HighScoreScreen}

@@ -51,7 +51,7 @@ export default class GameScreen extends Component<any, IGameScreenState> {
       //Alert.alert("Game Over");
       this.state.gameEngine.stop();
       this.state.onStop(e.score);
-      this.state.navigation.navigate("GameOver", { score: e.score, factor: this.state.factor });
+      this.state.navigation.push("GameOver", { score: e.score, factor: this.state.factor });
     }
   };
 

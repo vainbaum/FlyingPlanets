@@ -1,10 +1,11 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {IPlace} from "./GameOverScreen";
 
 const HighScoreScreen = (props: any) => {
   return (
     <View style={styles.fullScreen}>
-      {props.route.params.highScore.map((score: number, index: number) => {
+      {props.route.params.highScore.map((score: IPlace, index: number) => {
         let style = styles.other;
         if (index == 0) {
           style = styles.gold;
@@ -22,7 +23,7 @@ const HighScoreScreen = (props: any) => {
               adjustsFontSizeToFit
               numberOfLines={1}
             >
-              {score}
+              {score.name}: {score.score}
             </Text>
           </View>
         );
