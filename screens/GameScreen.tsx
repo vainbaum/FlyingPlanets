@@ -3,7 +3,7 @@ import { GameEngine } from "react-native-game-engine";
 import { Move, Press, Physics, GameBorders } from "../components/systems";
 import Entities from "../entities";
 import { Ring } from "../entities/Ring";
-import { StyleSheet, StatusBar, BackHandler } from "react-native";
+import { StyleSheet, StatusBar, BackHandler, Dimensions } from "react-native";
 import { ScoreBoard } from "../components/renderers";
 import { Image } from "react-native";
 
@@ -15,6 +15,7 @@ interface IGameScreenState {
   entities: any;
   navigation: any;
 }
+
 
 export default class GameScreen extends Component<any, IGameScreenState> {
   constructor(props: any) {
@@ -58,11 +59,13 @@ export default class GameScreen extends Component<any, IGameScreenState> {
   setupWorld = () => {
     let entity = Entities(null);
     let factor = this.state.factor;
+    const window = Dimensions.get("window");
+    const startingHeight = window.height * 0.1;
     return Object.assign({}, entity, {
-      1: Ring({ position: [70, 200], world: entity.physics.world }),
-      2: Ring({ position: [170, 200], world: entity.physics.world }),
-      3: Ring({ position: [270, 200], world: entity.physics.world }),
-      4: Ring({ position: [370, 200], world: entity.physics.world }),
+      1: Ring({ position: [window.width * 0.2, startingHeight], world: entity.physics.world }),
+      2: Ring({ position: [window.width * 0.4, startingHeight], world: entity.physics.world }),
+      3: Ring({ position: [window.width * 0.6, startingHeight], world: entity.physics.world }),
+      4: Ring({ position: [window.width * 0.8, startingHeight], world: entity.physics.world }),
       scoreBoard: {
         factor: 1,
         score: 0,

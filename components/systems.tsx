@@ -1,5 +1,6 @@
 import { TouchEvent } from "react-native-game-engine";
 import Matter from "matter-js";
+import {Dimensions} from "react-native";
 
 const Move = (entities, { touches, time }) => {
   const factor = entities.scoreBoard.factor;
@@ -52,10 +53,11 @@ const GameBorders = (entities, { time, dispatch }) => {
       continue;
     }
     const score = Math.round((entities.scoreBoard.score + Number.EPSILON) * 100) / 100;
+    const window = Dimensions.get("window");
     if (finger.body.position.x < -25 || finger.body.position.y < -25) {
       dispatch({ type: "game-over", score: score });
     }
-    if (finger.body.position.x > 430 || finger.body.position.y > 800) {
+    if (finger.body.position.x > window.width + 25 || finger.body.position.y > window.height + 25) {
       dispatch({ type: "game-over", score: score });
     }
   }

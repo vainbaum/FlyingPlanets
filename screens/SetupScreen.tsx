@@ -6,11 +6,13 @@ import {
   Text,
   StyleSheet,
   Image,
+  Dimensions
 } from "react-native";
 import {
   useFonts,
   MajorMonoDisplay_400Regular,
 } from "@expo-google-fonts/major-mono-display";
+
 
 interface ISetupScreenProps {
   route: any;
@@ -73,6 +75,8 @@ export const SetupScreen = ({ route, navigation }: ISetupScreenProps) => {
   );
 };
 
+const window = Dimensions.get("window");
+
 const style = StyleSheet.create({
   fullScreen: {
     flexDirection: "column",
@@ -89,14 +93,14 @@ const style = StyleSheet.create({
   fullScreenButton: {
     width: "100%",
     position: "absolute",
-    top: 700,
+    top: window.height * 0.8,
     alignItems: "center",
     borderRadius: 35,
   },
   highScoreButton: {
     width: "100%",
     position: "absolute",
-    top: 600,
+    top: window.height * 0.7,
     alignItems: "center",
     borderRadius: 35,
   },
