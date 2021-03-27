@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { GameEngine } from "react-native-game-engine";
 import { Move, Press, Physics, GameBorders } from "../components/systems";
 import Entities from "../entities";
-import { Ring } from "../entities/Ring";
+import { Planet } from "../entities/Planet";
 import { StyleSheet, StatusBar, BackHandler, Dimensions } from "react-native";
 import { ScoreBoard } from "../components/renderers";
 import { Image } from "react-native";
@@ -16,9 +16,17 @@ interface IGameScreenState {
   navigation: any;
 }
 
+interface IGameScreenProps {
+  route: { params: { factor: boolean } };
+  navigation: { navigation: () => boolean | null };
+  onStop: (score: number) => void;
+}
 
-export default class GameScreen extends Component<any, IGameScreenState> {
-  constructor(props: any) {
+export default class GameScreen extends Component<
+  IGameScreenProps,
+  IGameScreenState
+> {
+  constructor(props: IGameScreenProps) {
     super(props);
     this.state = {
       score: 0,
@@ -52,20 +60,17 @@ export default class GameScreen extends Component<any, IGameScreenState> {
       //Alert.alert("Game Over");
       this.state.gameEngine.stop();
       this.state.onStop(e.score);
-      this.state.navigation.push("GameOver", { score: e.score, factor: this.state.factor });
+      this.state.navigation.push("GameOver", {
+        score: e.score,
+        factor: this.state.factor,
+      });
     }
   };
 
   setupWorld = () => {
     let entity = Entities(null);
     let factor = this.state.factor;
-    const window = Dimensions.get("window");
-    const startingHeight = window.height * 0.1;
-    return Object.assign({}, entity, {
-      1: Ring({ position: [window.width * 0.2, startingHeight], world: entity.physics.world }),
-      2: Ring({ position: [window.width * 0.4, startingHeight], world: entity.physics.world }),
-      3: Ring({ position: [window.width * 0.6, startingHeight], world: entity.physics.world }),
-      4: Ring({ position: [window.width * 0.8, startingHeight], world: entity.physics.world }),
+    return Object.assign({}, entity, this.createPlanets(entity.physics.world), {
       scoreBoard: {
         factor: 1,
         score: 0,
@@ -73,6 +78,19 @@ export default class GameScreen extends Component<any, IGameScreenState> {
         renderer: <ScoreBoard score={0} factor={1} mutable={factor} />,
       },
     });
+  };
+
+  createPlanets = (world) => {
+    const window = Dimensions.get("window");
+    const startingHeight = window.height * 0.1;
+    let planetEntities = {};
+    for (let i = 1; i < 5; i++) {
+      planetEntities[i] = Planet({
+        position: [window.width * 0.2 * i, startingHeight],
+        world: world,
+      });
+    }
+    return planetEntities;
   };
   render() {
     return (
