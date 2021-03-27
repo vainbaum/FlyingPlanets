@@ -6,7 +6,7 @@ let id = 1;
 
 const RADIUS = 20;
 
-const Ring = (props: IProps & { world: any }) => {
+const Planet = (props: IProps & { world: any }) => {
   const ring = Matter.Bodies.circle(
     props.position[0],
     props.position[1],
@@ -24,4 +24,4 @@ const Ring = (props: IProps & { world: any }) => {
   return obj;
 };
 
-export { Ring };
+export { Planet };
