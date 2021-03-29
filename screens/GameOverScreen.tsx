@@ -7,6 +7,7 @@ import {
   TextInput,
   Modal,
   Pressable,
+  Image,
 } from "react-native";
 
 export interface IPlace {
@@ -59,7 +60,11 @@ const GameOverScreen = (props: IGameOverScreenProps) => {
   let name: string = "";
 
   return (
-    <View style={styles.fullScreen}>
+    <View style={styles.gameContainer}>
+      <Image
+        style={styles.backgroundImage}
+        source={require("../assets/images/cosmos.webp")}
+      />
       <View style={{ flex: 3 }}>
         <Modal animationType="fade" visible={visible}>
           <View style={styles.fullScreen}>
@@ -78,6 +83,7 @@ const GameOverScreen = (props: IGameOverScreenProps) => {
                 name = text;
               }}
               placeholder="Enter your name"
+              placeholderTextColor="snow"
               style={styles.input}
             />
             <Pressable
@@ -165,16 +171,6 @@ const styles = StyleSheet.create({
   backToScreenText: {
     color: "white",
   },
-  fullScreen: {
-    backgroundColor: "black",
-    opacity: 0.8,
-    justifyContent: "center",
-    alignItems: "center",
-    position: "absolute",
-    width: "100%",
-    height: "100%",
-    zIndex: -1,
-  },
   fullScreenButton: {
     flex: 1,
   },
@@ -193,6 +189,31 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     color: "white",
     fontSize: 30,
+    fontStyle: "italic",
+  },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: "cover",
+    position: "absolute",
+    zIndex: -1,
+  },
+  gameContainer: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    alignItems: "center",
+  },
+  fullScreen: {
+    backgroundColor: "black",
+    opacity: 0.8,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    zIndex: -1,
   },
 });
 

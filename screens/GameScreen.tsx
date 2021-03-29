@@ -105,7 +105,7 @@ export default class GameScreen extends Component<
       >
         <Image
           style={styles.backgroundImage}
-          source={require("../assets/images/cosmos.webp")}
+          source={require("../assets/images/cosmos-with-star.jpg")}
         />
         <StatusBar hidden={true} />
       </GameEngine>
