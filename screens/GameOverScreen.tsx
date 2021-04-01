@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  StyleSheet,
   Text,
   View,
   TouchableOpacity,
@@ -9,6 +8,7 @@ import {
   Pressable,
   Image,
 } from "react-native";
+import {ScaledStyleSheet} from "../components/scaler";
 
 export interface IPlace {
   score: number;
@@ -158,7 +158,7 @@ const GameOverScreen = (props: IGameOverScreenProps) => {
   );
 };
 
-const styles = StyleSheet.create({
+const styles = ScaledStyleSheet({
   container: {
     flex: 1,
     backgroundColor: "#fff",
@@ -214,6 +214,6 @@ const styles = StyleSheet.create({
     height: "100%",
     zIndex: -1,
   },
-});
+}, {width: 410, height: 800});
 
 export default GameOverScreen;

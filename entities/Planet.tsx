@@ -1,10 +1,11 @@
 import React from "react";
 import Matter from "matter-js";
 import { IProps, Finger } from "../components/renderers";
+import {scaleHeight} from "../components/scaler";
 
 let id = 1;
 
-const RADIUS = 20;
+const RADIUS = scaleHeight(20, 800);
 
 const Planet = (props: IProps & { world: any }) => {
   const ring = Matter.Bodies.circle(

@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
+import {ScaledStyleSheet} from "./scaler";
 
 const RADIUS = 20;
 
@@ -36,7 +37,7 @@ const ScoreBoard = (props: IScoreBoard) => {
   );
 };
 
-const styles = StyleSheet.create({
+const styles = ScaledStyleSheet({
   finger: {
     borderColor: "#CCC",
     borderWidth: 4,
@@ -67,6 +68,6 @@ const styles = StyleSheet.create({
     color: "snow",
     textAlign: "left",
   },
-});
+}, {width: 410, height: 800});
 
 export { Finger, ScoreBoard };

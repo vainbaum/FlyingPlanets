@@ -1,17 +1,16 @@
-import { StyleSheet } from "react-native";
-import { actuatedNormalize } from "../components/font-scaler";
+import { ScaledStyleSheet} from "../components/scaler";
 
 
-const fontStyles = StyleSheet.create({
+const fontStyles = ScaledStyleSheet({
   gameButtonText: {
     color: "snow",
-    fontSize: actuatedNormalize(20),
+    fontSize: 20,
     fontFamily: "Major_Mono_Display_Regular400",
     textAlign: "center",
   },
   settingsText: {
     color: "snow",
-    fontSize: actuatedNormalize(25),
+    fontSize: 25,
     flex: 1,
     marginRight: 5,
     textAlign: "center",
@@ -19,7 +18,7 @@ const fontStyles = StyleSheet.create({
   },
   helpText: {
     color: "snow",
-    fontSize: actuatedNormalize(16),
+    fontSize: 16,
     fontFamily: "Papyrus",
     flex: 1,
     textAlign: "left",
@@ -27,9 +26,9 @@ const fontStyles = StyleSheet.create({
   },
   gameOverText: {
     color: "white",
-    fontSize: actuatedNormalize(48),
+    fontSize: 48,
     textAlign: "center",
   },
-});
+}, {width: 410, height: 800});
 
 export default fontStyles;

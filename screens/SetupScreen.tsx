@@ -11,6 +11,7 @@ import {
 
 import {commonStyles} from "../styles/common";
 import fontStyles from "../styles/font-styles";
+import {ScaledStyleSheet} from "../components/scaler";
 
 
 interface ISetupScreenProps {
@@ -70,18 +71,18 @@ export const SetupScreen = ({ route, navigation }: ISetupScreenProps) => {
 
 const window = Dimensions.get("window");
 
-const style = StyleSheet.create({
+const style = ScaledStyleSheet({
   fullScreenButton: {
     width: "100%",
     position: "absolute",
-    top: window.height * 0.8,
+    top: 640,
     alignItems: "center",
     borderRadius: 35,
   },
   highScoreButton: {
     width: "100%",
     position: "absolute",
-    top: window.height * 0.7,
+    top: 560,
     alignItems: "center",
     borderRadius: 35,
   },
@@ -109,4 +110,4 @@ const style = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "deepskyblue",
   },
-});
+}, {width: 410, height: 800});
