@@ -63,7 +63,7 @@ const GameOverScreen = (props: IGameOverScreenProps) => {
     <View style={styles.gameContainer}>
       <Image
         style={styles.backgroundImage}
-        source={require("../assets/images/cosmos.webp")}
+        source={require("../assets/images/lost-planet.jpg")}
       />
       <View style={{ flex: 3 }}>
         <Modal animationType="fade" visible={visible}>
@@ -193,17 +193,16 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     flex: 1,
-    resizeMode: "cover",
+    resizeMode: "stretch",
     position: "absolute",
     zIndex: -1,
   },
   gameContainer: {
     position: "absolute",
     top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
     alignItems: "center",
+    width: "100%",
+    height: "100%",
   },
   fullScreen: {
     backgroundColor: "black",

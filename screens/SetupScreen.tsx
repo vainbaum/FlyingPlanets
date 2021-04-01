@@ -8,10 +8,9 @@ import {
   Image,
   Dimensions
 } from "react-native";
-import {
-  useFonts,
-  MajorMonoDisplay_400Regular,
-} from "@expo-google-fonts/major-mono-display";
+
+import {commonStyles} from "../styles/common";
+import fontStyles from "../styles/font-styles";
 
 
 interface ISetupScreenProps {
@@ -20,20 +19,14 @@ interface ISetupScreenProps {
 }
 export const SetupScreen = ({ route, navigation }: ISetupScreenProps) => {
   const [factor, setFactor] = useState(false);
-  let [fontsLoaded] = useFonts({
-    MajorMonoDisplay_400Regular,
-  });
-  if (!fontsLoaded) {
-    return <Text>Loading</Text>;
-  }
   return (
     <View>
       <Image
-        style={style.backgroundImage}
+        style={commonStyles.backgroundImage}
         source={require("../assets/images/cosmos.webp")}
       />
       <View style={style.factorView}>
-        <Text style={style.factorText}>Factor</Text>
+        <Text style={fontStyles.settingsText}>Factor</Text>
         <Switch
           onValueChange={() => {
             setFactor(!factor);
@@ -45,7 +38,7 @@ export const SetupScreen = ({ route, navigation }: ISetupScreenProps) => {
         />
       </View>
       <View style={style.factorHelpView}>
-        <Text style={style.factorText} adjustsFontSizeToFit numberOfLines={3}>
+        <Text style={fontStyles.helpText} adjustsFontSizeToFit numberOfLines={3}>
           Factor makes game harder, as objects response on finger moves becomes
           more sensetive over time. On the other hand, score over time is
           multiplied by the factor{" "}
@@ -56,7 +49,7 @@ export const SetupScreen = ({ route, navigation }: ISetupScreenProps) => {
           style={style.startGameButton}
           onPress={() => navigation.navigate("HighScore")}
         >
-          <Text style={style.startGameText}>High Score</Text>
+          <Text style={fontStyles.gameButtonText}>High Score</Text>
         </TouchableOpacity>
       </View>
       <View style={style.fullScreenButton}>
@@ -68,7 +61,7 @@ export const SetupScreen = ({ route, navigation }: ISetupScreenProps) => {
             })
           }
         >
-          <Text style={style.startGameText}>Start Game</Text>
+          <Text style={fontStyles.gameButtonText}>Start Game</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -78,18 +71,6 @@ export const SetupScreen = ({ route, navigation }: ISetupScreenProps) => {
 const window = Dimensions.get("window");
 
 const style = StyleSheet.create({
-  fullScreen: {
-    flexDirection: "column",
-    position: "absolute",
-    flex: 1,
-    opacity: 0.9,
-  },
-  backgroundImage: {
-    flex: 1,
-    resizeMode: "cover",
-    position: "absolute",
-    zIndex: -1,
-  },
   fullScreenButton: {
     width: "100%",
     position: "absolute",
@@ -108,25 +89,6 @@ const style = StyleSheet.create({
   fullScreenSwitch: {
     flex: 1,
     marginLeft: 5,
-  },
-  startGameText: {
-    color: "snow",
-    fontSize: 25,
-    fontFamily: "MajorMonoDisplay_400Regular",
-    textAlign: "center",
-  },
-  factorText: {
-    color: "snow",
-    fontSize: 25,
-    flex: 1,
-    marginRight: 5,
-    textAlign: "center",
-  },
-  factorHelpText: {
-    color: "snow",
-    fontSize: 16,
-    flex: 1,
-    textAlign: "left",
   },
   factorView: {
     alignItems: "center",

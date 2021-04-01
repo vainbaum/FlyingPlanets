@@ -6,6 +6,8 @@ import { Planet } from "../entities/Planet";
 import { StyleSheet, StatusBar, BackHandler, Dimensions } from "react-native";
 import { ScoreBoard } from "../components/renderers";
 import { Image } from "react-native";
+import {commonStyles} from "../styles/common";
+
 
 interface IGameScreenState {
   score: number;
@@ -98,13 +100,13 @@ export default class GameScreen extends Component<
         ref={(ref) => {
           this.state.gameEngine = ref;
         }}
-        style={styles.gameContainer}
+        style={commonStyles.fullscreen}
         systems={[Move, Physics, Press, GameBorders]}
         onEvent={this.onEvent}
         entities={this.state.entities}
       >
         <Image
-          style={styles.backgroundImage}
+          style={commonStyles.backgroundImage}
           source={require("../assets/images/cosmos-with-star.jpg")}
         />
         <StatusBar hidden={true} />
@@ -113,18 +115,3 @@ export default class GameScreen extends Component<
   }
 }
 
-const styles = StyleSheet.create({
-  gameContainer: {
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-  },
-  backgroundImage: {
-    flex: 1,
-    resizeMode: "cover",
-    position: "absolute",
-    zIndex: -1,
-  },
-});
