@@ -1,6 +1,7 @@
 import { TouchEvent } from "react-native-game-engine";
 import Matter from "matter-js";
-import {Dimensions} from "react-native";
+import { Dimensions } from "react-native";
+import { scaleHeight } from "../components/scaler";
 
 const Move = (entities, { touches, time }) => {
   const factor = entities.scoreBoard.factor;
@@ -47,23 +48,36 @@ const Physics = (entities, { time }) => {
 };
 
 const GameBorders = (entities, { time, dispatch }) => {
+  const score =
+    Math.round((entities.scoreBoard.score + Number.EPSILON) * 100) / 100;
   for (let i = 1; i < 5; i++) {
     const finger = entities[i];
     if (!finger) {
       continue;
     }
-    const score = Math.round((entities.scoreBoard.score + Number.EPSILON) * 100) / 100;
-    const window = Dimensions.get("window");
-    if (finger.body.position.x < -25 || finger.body.position.y < -25) {
+    if (isOutOfBorders(finger.body.position)) {
       dispatch({ type: "game-over", score: score });
-    }
-    if (finger.body.position.x > window.width + 25 || finger.body.position.y > window.height + 25) {
-      dispatch({ type: "game-over", score: score });
+      return;
     }
   }
   entities.scoreBoard.score +=
     (time.delta * entities.scoreBoard.factor) / 100.0;
   return entities;
 };
+
+function isOutOfBorders(position: { x: number; y: number }): boolean {
+  const window = Dimensions.get("window");
+  const borderWidth = scaleHeight(25, 800);
+  if (position.x < -borderWidth || position.y < -borderWidth) {
+    return true;
+  }
+  if (
+    position.x > window.width + borderWidth ||
+    position.y > window.height + borderWidth
+  ) {
+    return true;
+  }
+  return false;
+}
 
 export { Move, Press, Physics, GameBorders };
