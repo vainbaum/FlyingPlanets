@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { GameEngine } from "react-native-game-engine";
-import { Move, Press, Physics, GameBorders } from "../components/systems";
+import {World} from "matter-js";
+import { Move, Press, Physics, GameBorders, GameEntities, IPlanets } from "../components/systems";
 import Entities from "../entities";
 import { Planet } from "../entities/Planet";
 import { StyleSheet, StatusBar, BackHandler, Dimensions } from "react-native";
@@ -14,7 +15,7 @@ interface IGameScreenState {
   factor: boolean;
   gameEngine: any;
   onStop: (score: number) => void;
-  entities: any;
+  entities: GameEntities | {};
   navigation: any;
 }
 
@@ -35,10 +36,9 @@ export default class GameScreen extends Component<
       factor: props.route.params.factor,
       gameEngine: null,
       onStop: props.onStop,
-      entities: {},
+      entities: this.setupWorld(props.route.params.factor),
       navigation: props.navigation,
     };
-    this.state.entities = this.setupWorld();
   }
 
   goBack = () => {
@@ -59,7 +59,6 @@ export default class GameScreen extends Component<
       return;
     }
     if (e.type === "game-over") {
-      //Alert.alert("Game Over");
       this.state.gameEngine.stop();
       this.state.onStop(e.score);
       this.state.navigation.push("GameOver", {
@@ -69,9 +68,8 @@ export default class GameScreen extends Component<
     }
   };
 
-  setupWorld = () => {
+  setupWorld = (factor: boolean) : GameEntities => {
     let entity = Entities(null);
-    let factor = this.state.factor;
     return Object.assign({}, entity, this.createPlanets(entity.physics.world), {
       scoreBoard: {
         factor: 1,
@@ -82,18 +80,21 @@ export default class GameScreen extends Component<
     });
   };
 
-  createPlanets = (world) => {
+  createPlanets = (world: World): IPlanets  => {
     const window = Dimensions.get("window");
     const startingHeight = window.height * 0.1;
-    let planetEntities = {};
-    for (let i = 1; i < 5; i++) {
-      planetEntities[i] = Planet({
+    let planetEntities: IPlanets = {};
+    let i = 1;
+    while (i <= 4){
+      planetEntities[i] = (Planet({
         position: [window.width * 0.2 * i, startingHeight],
         world: world,
-      });
+      }));
+      i++;
     }
     return planetEntities;
   };
+
   render() {
     return (
       <GameEngine
