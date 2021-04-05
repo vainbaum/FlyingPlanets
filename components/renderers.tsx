@@ -1,12 +1,12 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 import {ScaledStyleSheet} from "./scaler";
+import {IPlanet} from "../entities/Planet";
 
 const RADIUS = 20;
 
 export interface IProps {
-  position: number[];
-  text?: number | string;
+  position: [number, number];
   pressed?: boolean;
   body?: any;
 }
@@ -17,7 +17,7 @@ export interface IScoreBoard {
   mutable: boolean;
 }
 
-const Finger = (props: IProps) => {
+const PlanetRenderer = (props: IProps) => {
   const x = props.body.position.x - RADIUS / 2;
   const y = props.body.position.y - RADIUS / 2;
   const style = props.pressed ? styles.pressedFinger : styles.finger;
@@ -70,4 +70,4 @@ const styles = ScaledStyleSheet({
   },
 }, {width: 410, height: 800});
 
-export { Finger, ScoreBoard };
+export { PlanetRenderer, ScoreBoard};

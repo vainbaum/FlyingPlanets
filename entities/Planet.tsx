@@ -1,13 +1,18 @@
 import React from "react";
 import Matter from "matter-js";
-import { IProps, Finger } from "../components/renderers";
+import { IProps, PlanetRenderer} from "../components/renderers";
 import {scaleHeight} from "../components/scaler";
-
-let id = 1;
 
 const RADIUS = scaleHeight(20, 800);
 
-const Planet = (props: IProps & { world: any }) => {
+interface IPlanet {
+  body: any;
+  position: [number, number];
+  pressed: boolean;
+  renderer: any;
+}
+
+const Planet = (props: IProps & { world: any }) : IPlanet => {
   const ring = Matter.Bodies.circle(
     props.position[0],
     props.position[1],
@@ -17,12 +22,10 @@ const Planet = (props: IProps & { world: any }) => {
   const obj = {
     body: ring,
     position: props.position,
-    text: id,
     pressed: false,
-    renderer: <Finger position={props.position} pressed={false} text={id} />,
+    renderer: <PlanetRenderer position={props.position} pressed={false} />,
   };
-  id++;
   return obj;
 };
 
-export { Planet };
+export { Planet, IPlanet };

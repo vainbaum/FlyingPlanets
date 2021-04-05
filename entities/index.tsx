@@ -1,8 +1,16 @@
 import Matter from "matter-js";
+import {Engine, World} from "matter-js";
 
 Matter.Common.isElement = () => false; //-- Overriding this function because the original references HTMLElement
 
-export default (restart: {physics: any} | null) => {
+interface IPhysics {
+  physics: {
+    engine: Engine;
+    world: World;
+  };
+}
+
+export default (restart: {physics: any} | null) : IPhysics => {
   if (restart) {
     Matter.Engine.clear(restart.physics.engine);
   }
@@ -16,3 +24,5 @@ export default (restart: {physics: any} | null) => {
     physics: { engine: engine, world: world },
   };
 };
+
+export {IPhysics};
