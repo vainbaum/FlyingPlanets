@@ -2,16 +2,29 @@ import { TouchEvent } from "react-native-game-engine";
 import Matter from "matter-js";
 import { Dimensions } from "react-native";
 import { scaleHeight } from "../components/scaler";
+import {IPlanet} from "../entities/Planet";
+import {IPhysics} from "../entities/"
+import {IScoreBoard} from "../components/renderers";
 
-const Move = (entities, { touches, time }) => {
+export interface IScoreBoardEntity {
+  scoreBoard: IScoreBoard & {renderer: any};
+}
+
+export interface IPlanets {
+ [key: string]: IPlanet;
+}
+
+export type GameEntities = IPlanets & IScoreBoardEntity & IPhysics;
+
+const Move = (entities: GameEntities, { touches, time }) : GameEntities => {
   const factor = entities.scoreBoard.factor;
   touches
     .filter((t: TouchEvent) => t.type === "move")
     .forEach((t: TouchEvent) => {
-      let finger = entities[t.id + 1];
-      if (finger) {
-        finger.body.position.x += t.delta.pageX * 0.1 * factor;
-        finger.body.position.y += t.delta.pageY * 0.1 * factor;
+      let planet= entities[t.id+1];
+      if (planet) {
+        planet.body.position.x += t.delta.pageX * 0.1 * factor;
+        planet.body.position.y += t.delta.pageY * 0.1 * factor;
       }
     });
 
@@ -21,43 +34,42 @@ const Move = (entities, { touches, time }) => {
   return entities;
 };
 
-const Press = (entities, { touches }) => {
-  for (let i = 1; i < 6; i++) {
-    const touchId = i - 1;
+const Press = (entities: GameEntities, { touches }) : GameEntities => {
+  for (let i = 0; i < 4; i++) {
     touches
-      .filter((t: TouchEvent) => t.id === touchId)
+      .filter((t: TouchEvent) => t.id === i)
       .forEach((t) => {
-        let finger = entities[i];
-        if (!finger) {
+        let planet = entities[i + 1];
+        if (!planet) {
           return;
         }
         if (t.type === "end") {
-          finger.pressed = false;
+          planet.pressed = false;
         } else {
-          finger.pressed = true;
+          planet.pressed = true;
         }
       });
   }
   return entities;
 };
 
-const Physics = (entities, { time }) => {
+const Physics = (entities: GameEntities, { time }) : GameEntities => {
   let engine = entities.physics.engine;
   Matter.Engine.update(engine, time.delta);
   return entities;
 };
 
-const GameBorders = (entities, { time, dispatch }) => {
+const GameBorders = (entities: GameEntities, { time, dispatch }) : GameEntities => {
   const score =
     Math.round((entities.scoreBoard.score + Number.EPSILON) * 100) / 100;
-  for (let i = 1; i < 5; i++) {
-    const finger = entities[i];
-    if (!finger) {
+  for (let i = 0; i < 4; i++) {
+    const planet= entities[i+1];
+    if (!planet) {
       continue;
     }
-    if (isOutOfBorders(finger.body.position)) {
+    if (isOutOfBorders(planet.body.position)) {
       dispatch({ type: "game-over", score: score });
-      return;
+      return entities;
     }
   }
   entities.scoreBoard.score +=
