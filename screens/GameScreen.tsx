@@ -1,14 +1,20 @@
 import React, { Component } from "react";
 import { GameEngine } from "react-native-game-engine";
-import {World} from "matter-js";
-import { Move, Press, Physics, GameBorders, GameEntities, IPlanets } from "../components/systems";
+import { World } from "matter-js";
+import {
+  Move,
+  Press,
+  Physics,
+  GameBorders,
+  GameEntities,
+  IPlanets,
+} from "../components/systems";
 import Entities from "../entities";
 import { Planet } from "../entities/Planet";
 import { StyleSheet, StatusBar, BackHandler, Dimensions } from "react-native";
 import { ScoreBoard } from "../components/renderers";
-import { Image } from "react-native";
-import {commonStyles} from "../styles/common";
-
+import { Image, View } from "react-native";
+import { commonStyles } from "../styles/common";
 
 interface IGameScreenState {
   score: number;
@@ -68,7 +74,7 @@ export default class GameScreen extends Component<
     }
   };
 
-  setupWorld = (factor: boolean) : GameEntities => {
+  setupWorld = (factor: boolean): GameEntities => {
     let entity = Entities(null);
     return Object.assign({}, entity, this.createPlanets(entity.physics.world), {
       scoreBoard: {
@@ -80,16 +86,16 @@ export default class GameScreen extends Component<
     });
   };
 
-  createPlanets = (world: World): IPlanets  => {
+  createPlanets = (world: World): IPlanets => {
     const window = Dimensions.get("window");
     const startingHeight = window.height * 0.1;
     let planetEntities: IPlanets = {};
     let i = 1;
-    while (i <= 4){
-      planetEntities[i] = (Planet({
+    while (i <= 4) {
+      planetEntities[i] = Planet({
         position: [window.width * 0.2 * i, startingHeight],
         world: world,
-      }));
+      });
       i++;
     }
     return planetEntities;
@@ -97,22 +103,22 @@ export default class GameScreen extends Component<
 
   render() {
     return (
-      <GameEngine
-        ref={(ref) => {
-          this.state.gameEngine = ref;
-        }}
-        style={commonStyles.fullscreen}
-        systems={[Move, Physics, Press, GameBorders]}
-        onEvent={this.onEvent}
-        entities={this.state.entities}
-      >
-        <Image
-          style={commonStyles.backgroundImage}
-          source={require("../assets/images/cosmos-with-star.jpg")}
-        />
-        <StatusBar hidden={true} />
-      </GameEngine>
+      <View style={[commonStyles.fullscreen, {justifyContent: "center"}]}>
+        <GameEngine
+          ref={(ref) => {
+            this.state.gameEngine = ref;
+          }}
+          systems={[Move, Physics, Press, GameBorders]}
+          onEvent={this.onEvent}
+          entities={this.state.entities}
+        >
+          <Image
+            style={commonStyles.backgroundImage}
+            source={require("../assets/images/cosmos-with-star.jpg")}
+          />
+          <StatusBar hidden={true} />
+        </GameEngine>
+      </View>
     );
   }
 }
-
