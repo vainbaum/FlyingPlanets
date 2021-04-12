@@ -43,21 +43,18 @@ function getEntityIndex(i : number) : number {
 }
 
 const Press = (entities: GameEntities, {touches}: {touches: TouchEvent[]} ) : GameEntities => {
-  for (let i = 0; i < 4; i++) {
-    touches
-      .filter((t: TouchEvent) => {return t.id === i})
-      .forEach((t) => {
-        let planet = entities[getEntityIndex(i)];
-        if (!planet) {
-          return;
-        }
-        if (t.type === "end") {
-          planet.pressed = false;
-        } else {
-          planet.pressed = true;
-        }
-      });
-  }
+  touches
+    .forEach((t) => {
+      let planet = entities[getEntityIndex(t.id)];
+      if (!planet) {
+        return;
+      }
+      if (t.type === "end" || t.type === "press") {
+        planet.pressed = false;
+      } else {
+        planet.pressed = true;
+      }
+    });
   return entities;
 };
 
@@ -69,7 +66,7 @@ const Physics = (entities: GameEntities, { time }) : GameEntities => {
 
 const GameBorders = (entities: GameEntities, { time, dispatch}) : GameEntities => {
   const score =
-    Math.round((entities.scoreBoard.score + Number.EPSILON) * 100) / 100;
+    Math.round(entities.scoreBoard.score + Number.EPSILON);
   for (let i = 0; i < 4; i++) {
     const planet= entities[getEntityIndex(i)];
     if (!planet) {
