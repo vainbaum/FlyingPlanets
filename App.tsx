@@ -1,5 +1,5 @@
 import React from "react";
-import {Text, View} from "react-native";
+import { Text, View } from "react-native";
 import GameScreen from "./screens/GameScreen";
 import { SetupScreen } from "./screens/SetupScreen";
 import GameOverScreen, { IPlace } from "./screens/GameOverScreen";
@@ -8,7 +8,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Font from "expo-font";
-import AppLoading from 'expo-app-loading';
+import AppLoading from "expo-app-loading";
 
 const Stack = createStackNavigator();
 
@@ -66,13 +66,13 @@ class BestGameEver extends React.Component<any, IAppState> {
 
   render() {
     if (!this.state.fontsLoaded) {
-	return <AppLoading />;
+      return <AppLoading />;
     }
     return (
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName="Setup"
-          screenOptions={{ headerShown: false }}
+          screenOptions={{ headerShown: false, gestureEnabled: false }}
         >
           <Stack.Screen name="Setup" component={SetupScreen} />
           <Stack.Screen name="Game">

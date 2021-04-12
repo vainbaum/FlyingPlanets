@@ -1,6 +1,6 @@
 import { TouchEvent } from "react-native-game-engine";
 import Matter from "matter-js";
-import { Dimensions } from "react-native";
+import { Dimensions, Platform } from "react-native";
 import { scaleHeight } from "../components/scaler";
 import {IPlanet} from "../entities/Planet";
 import {IPhysics} from "../entities/"
@@ -21,7 +21,7 @@ const Move = (entities: GameEntities, { touches, time }) : GameEntities => {
   touches
     .filter((t: TouchEvent) => t.type === "move")
     .forEach((t: TouchEvent) => {
-      let planet= entities[t.id+1];
+      let planet= entities[getEntityIndex(t.id)];
       if (planet) {
         planet.body.position.x += t.delta.pageX * 0.1 * factor;
         planet.body.position.y += t.delta.pageY * 0.1 * factor;
@@ -34,12 +34,20 @@ const Move = (entities: GameEntities, { touches, time }) : GameEntities => {
   return entities;
 };
 
-const Press = (entities: GameEntities, { touches }) : GameEntities => {
+function getEntityIndex(i : number) : number {
+  if (Platform.OS === "ios") {
+    return i;
+  } else {
+    return i + 1;
+  }
+}
+
+const Press = (entities: GameEntities, {touches}: {touches: TouchEvent[]} ) : GameEntities => {
   for (let i = 0; i < 4; i++) {
     touches
-      .filter((t: TouchEvent) => t.id === i)
+      .filter((t: TouchEvent) => {return t.id === i})
       .forEach((t) => {
-        let planet = entities[i + 1];
+        let planet = entities[getEntityIndex(i)];
         if (!planet) {
           return;
         }
@@ -59,11 +67,11 @@ const Physics = (entities: GameEntities, { time }) : GameEntities => {
   return entities;
 };
 
-const GameBorders = (entities: GameEntities, { time, dispatch }) : GameEntities => {
+const GameBorders = (entities: GameEntities, { time, dispatch}) : GameEntities => {
   const score =
     Math.round((entities.scoreBoard.score + Number.EPSILON) * 100) / 100;
   for (let i = 0; i < 4; i++) {
-    const planet= entities[i+1];
+    const planet= entities[getEntityIndex(i)];
     if (!planet) {
       continue;
     }
