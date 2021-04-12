@@ -103,7 +103,11 @@ export default class GameScreen extends Component<
 
   render() {
     return (
-      <View style={[commonStyles.fullscreen, {justifyContent: "center"}]}>
+      <View style={[commonStyles.fullscreen, { justifyContent: "center" }]}>
+        <Image
+          style={commonStyles.backgroundImage}
+          source={require("../assets/images/cosmos-with-star.jpg")}
+        />
         <GameEngine
           ref={(ref) => {
             this.state.gameEngine = ref;
@@ -111,13 +115,7 @@ export default class GameScreen extends Component<
           systems={[Move, Physics, Press, GameBorders]}
           onEvent={this.onEvent}
           entities={this.state.entities}
-        >
-          <Image
-            style={commonStyles.backgroundImage}
-            source={require("../assets/images/cosmos-with-star.jpg")}
-          />
-          <StatusBar hidden={true} />
-        </GameEngine>
+        />
       </View>
     );
   }
