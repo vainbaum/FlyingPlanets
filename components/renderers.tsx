@@ -48,7 +48,6 @@ const styles = ScaledStyleSheet({
     position: "absolute",
     alignItems: "center",
     justifyContent: "center",
-    zIndex: 2,
   },
   pressedFinger: {
     borderColor: "#CCC",
@@ -60,7 +59,6 @@ const styles = ScaledStyleSheet({
     position: "absolute",
     alignItems: "center",
     justifyContent: "center",
-    zIndex: 2,
   },
   scoreBoard: {
     position: "absolute",
