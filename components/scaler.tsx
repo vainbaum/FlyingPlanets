@@ -66,5 +66,5 @@ export function ScaledStyleSheet(
 
 export function scaleHeight(property: number, originalHeight: number){
   const heightScale = SCREEN_HEIGHT / originalHeight;
-  return Math.ceil(property * heightScale);
+  return property * heightScale;
 }
