@@ -29,10 +29,12 @@ const Move = (
   touches
     .filter((t: TouchEvent) => t.type === "move")
     .forEach((t: TouchEvent) => {
+
       if (!t.delta) {
         return;
       }
       let planet = entities[getEntityIndex(t.id)];
+
       if (planet) {
         planet.body.position.x += t.delta.pageX * 0.1 * factor;
         planet.body.position.y += t.delta.pageY * 0.1 * factor;
@@ -45,13 +47,16 @@ const Move = (
   return entities;
 };
 
+
 function getEntityIndex(i: number): number {
+
   if (Platform.OS === "ios") {
     return i;
   } else {
     return i + 1;
   }
 }
+
 
 const Press = (
   entities: GameEntities,
@@ -87,6 +92,7 @@ const GameBorders = (
   const score = Math.round(entities.scoreBoard.score + Number.EPSILON);
   for (let i = 0; i < 4; i++) {
     const planet = entities[getEntityIndex(i)];
+
     if (!planet) {
       continue;
     }

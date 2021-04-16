@@ -15,6 +15,7 @@ const commonStyles = StyleSheet.create({
     resizeMode: "cover",
     position: "absolute",
     zIndex: -1,
+    alignSelf: "center",
   },
 });
 
