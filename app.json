@@ -30,6 +30,11 @@
     },
     "web": {
       "favicon": "./assets/images/Planet.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "a3ca0f18-1fff-4700-acea-412d377aff2e"
+      }
     }
   }
 }

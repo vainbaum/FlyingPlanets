@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -9,6 +9,8 @@ import {
   Image,
 } from "react-native";
 import {ScaledStyleSheet} from "../components/scaler";
+import database from "@react-native-firebase/database"
+import { firebase } from '@react-native-firebase/database';
 
 export interface IPlace {
   score: number;
@@ -54,6 +56,13 @@ const setHighScore = (
 const GameOverScreen = (props: IGameOverScreenProps) => {
   let { score } = props.route.params;
   let { highScore, onNewHighScore } = props;
+  const [highScore, setHighScore] = useState([]) 
+  useEffect(() => {
+    firebase.app().database("https://flyingplanets-b3639-default-rtdb.firebaseio.com").ref("/highscore").once("scores").then(snapshot => {
+      console.log(snapshot.val())
+    })
+
+  })
   const place = findPlace(score, highScore);
   const [visible, setModalVisible] = useState(place !== null);
 
@@ -184,11 +193,12 @@ const styles = ScaledStyleSheet({
     borderRadius: 20,
   },
   input: {
-    height: 40,
+    height: 50,
+    width: "90%",
     margin: 12,
     borderWidth: 1,
     color: "white",
-    fontSize: 30,
+    fontSize: 25,
     fontStyle: "italic",
   },
   backgroundImage: {
